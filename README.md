@@ -38,8 +38,8 @@ Los errores y eventos se registran en `logs/software_fj.log`.
 
 Grupo 213023_74
 
-- _Integrante 1_
-- _Integrante 2_
-- _Integrante 3_
-- Luis Daniel Vergara Orozco
 - Rosa Isela Betancurt Cabrales
+- Luis Daniel Vergara Orozco
+- Iván Daniel Jiménez Carrillo
+- Integrante_4
+- Integrante_5
