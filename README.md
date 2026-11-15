@@ -41,5 +41,5 @@ Grupo 213023_74
 - _Integrante 1_
 - _Integrante 2_
 - _Integrante 3_
-- _Integrante 4_
+- Luis Daniel Vergara Orozco
 - Rosa Isela Betancurt Cabrales
