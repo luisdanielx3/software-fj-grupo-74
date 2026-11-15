@@ -1,63 +1,81 @@
+
 """
 Clase Cliente: encapsula los datos personales y los valida de forma estricta.
 """
 
-import re                                        # Expresiones regulares para validar formatos
+import re  # Expresiones regulares para validar formatos.
 
 from .entidad import EntidadBase
 from .excepciones import ClienteInvalidoError, ParametroFaltanteError
 
-# Patrones de validacion (se compilan una sola vez)
-PATRON_NOMBRE = re.compile(r"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]{3,60}$")    # Solo letras y espacios
-PATRON_DOCUMENTO = re.compile(r"^\d{6,12}$")                      # Solo digitos, 6 a 12
-PATRON_CORREO = re.compile(r"^[\w.+-]+@[\w-]+\.[\w.-]+$")         # usuario@dominio.ext
-PATRON_TELEFONO = re.compile(r"^\d{7,10}$")                       # 7 a 10 digitos
+# Patrones de validacion.
+PATRON_NOMBRE = re.compile(r"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]{3,60}$")
+PATRON_DOCUMENTO = re.compile(r"^\d{6,12}$")
+PATRON_CORREO = re.compile(r"^[\w.+-]+@[\w-]+\.[\w.-]+$")
+PATRON_TELEFONO = re.compile(r"^\d{7,10}$")
 
 
 class Cliente(EntidadBase):
-    """Cliente de Software FJ. Sus atributos son privados (_nombre, _documento...)."""
+    """Cliente de Software FJ."""
 
-    prefijo = "CLI"                              # Los IDs seran CLI-001, CLI-002, ...
+    prefijo = "CLI"
 
     def __init__(self, nombre, documento, correo, telefono):
-        # Cada asignacion pasa por el setter correspondiente, que valida el dato.
+        # Validar y guardar los datos del cliente.
         self.nombre = nombre
         self.documento = documento
         self.correo = correo
         self.telefono = telefono
-        super().__init__()                       # Genera el ID solo si todo fue valido
+
+        # Generar el identificador cuando los datos sean validos.
+        super().__init__()
 
     # ---------- Validaciones auxiliares ----------
+
     @staticmethod
     def _texto_obligatorio(valor, campo):
         """Verifica que el dato exista y sea un texto no vacio."""
-        if valor is None:                                            # No se entrego el dato
-            raise ParametroFaltanteError(f"Falta el dato obligatorio: {campo}.")
-        if not isinstance(valor, str):                               # Tipo incorrecto
-            raise ClienteInvalidoError(f"{campo} debe ser texto, se recibio {type(valor).__name__}.")
-        valor = valor.strip()                                        # Quita espacios sobrantes
-        if not valor:                                                # Texto vacio
-            raise ClienteInvalidoError(f"{campo} no puede estar vacio.")
+
+        if valor is None:
+            raise ParametroFaltanteError(
+                f"Falta el dato obligatorio: {campo}."
+            )
+
+        if not isinstance(valor, str):
+            raise ClienteInvalidoError(
+                f"{campo} debe ser texto, se recibio {type(valor).__name__}."
+            )
+
+        valor = valor.strip()
+
+        if not valor:
+            raise ClienteInvalidoError(
+                f"{campo} no puede estar vacio."
+            )
+
         return valor
 
     # ---------- Propiedades (getters y setters) ----------
+
     @property
     def nombre(self):
         return self._nombre
 
+    @nombre.setter
+    def nombre(self, valor):
+        valor = self._texto_obligatorio(valor, "nombre")
 
-@nombre.setter
-def nombre(self, valor):  # Setter encargado de validar y guardar el nombre.
-    valor = self._texto_obligatorio(valor, "nombre")  # Verifica que el nombre no esté vacío.
+        if not PATRON_NOMBRE.match(valor):
+            raise ClienteInvalidoError(
+                f"Nombre invalido: '{valor}' (solo letras, 3 a 60 caracteres)."
+            )
 
-    if not PATRON_NOMBRE.match(valor):  # Comprueba que solo tenga letras y espacios.
-        raise ClienteInvalidoError(f"Nombre invalido: '{valor}' (solo letras, 3 a 60 caracteres).")  # Informa si el formato es incorrecto.
+        if len(valor.split()) < 2:
+            raise ClienteInvalidoError(
+                "Debe ingresar nombre y apellido."
+            )
 
-    if len(valor.split()) < 2:  # Comprueba que el nombre tenga al menos dos palabras.
-        raise ClienteInvalidoError("Debe ingresar nombre y apellido.")  # Rechaza nombres sin apellido.
-
-    self._nombre = valor.title()  # Guarda el nombre y apellido con iniciales mayúsculas.
-
+        self._nombre = valor.title()
 
     @property
     def documento(self):
@@ -66,8 +84,12 @@ def nombre(self, valor):  # Setter encargado de validar y guardar el nombre.
     @documento.setter
     def documento(self, valor):
         valor = self._texto_obligatorio(valor, "documento")
+
         if not PATRON_DOCUMENTO.match(valor):
-            raise ClienteInvalidoError(f"Documento invalido: '{valor}' (solo numeros, 6 a 12 digitos).")
+            raise ClienteInvalidoError(
+                f"Documento invalido: '{valor}' (solo numeros, 6 a 12 digitos)."
+            )
+
         self._documento = valor
 
     @property
@@ -77,8 +99,12 @@ def nombre(self, valor):  # Setter encargado de validar y guardar el nombre.
     @correo.setter
     def correo(self, valor):
         valor = self._texto_obligatorio(valor, "correo")
+
         if not PATRON_CORREO.match(valor):
-            raise ClienteInvalidoError(f"Correo invalido: '{valor}'.")
+            raise ClienteInvalidoError(
+                f"Correo invalido: '{valor}'."
+            )
+
         self._correo = valor.lower()
 
     @property
@@ -88,17 +114,39 @@ def nombre(self, valor):  # Setter encargado de validar y guardar el nombre.
     @telefono.setter
     def telefono(self, valor):
         valor = self._texto_obligatorio(valor, "telefono")
+
         if not PATRON_TELEFONO.match(valor):
-            raise ClienteInvalidoError(f"Telefono invalido: '{valor}' (7 a 10 digitos).")
+            raise ClienteInvalidoError(
+                f"Telefono invalido: '{valor}' (7 a 10 digitos)."
+            )
+
         self._telefono = valor
 
-# Método para actualizar el correo y el teléfono del cliente.
-def actualizar_contacto(self, correo, telefono):  # Recibe los dos nuevos datos.
+    # ---------- Actualizacion de contacto ----------
 
-    self.correo = correo  # Actualiza el correo utilizando su setter y validación.
+    def actualizar_contacto(self, correo, telefono):
+        """Actualiza el correo y el telefono del cliente."""
 
-    self.telefono = telefono  # Actualiza el teléfono utilizando su setter y validación.
+        # Validar ambos datos antes de modificar el contacto.
+        correo = self._texto_obligatorio(correo, "correo")
+        telefono = self._texto_obligatorio(telefono, "telefono")
+
+        if not PATRON_CORREO.match(correo):
+            raise ClienteInvalidoError(f"Correo invalido: '{correo}'.")
+
+        if not PATRON_TELEFONO.match(telefono):
+            raise ClienteInvalidoError(
+                f"Telefono invalido: '{telefono}' (7 a 10 digitos)."
+            )
+
+        # Actualizar utilizando los setters correspondientes.
+        self.correo = correo
+        self.telefono = telefono
 
     # ---------- Metodo abstracto implementado ----------
+
     def describir(self):
-        return f"[{self.id}] {self.nombre} | Doc: {self.documento} | {self.correo} | Tel: {self.telefono}"
+        return (
+            f"[{self.id}] {self.nombre} | Doc: {self.documento} "
+            f"| {self.correo} | Tel: {self.telefono}"
+        )
