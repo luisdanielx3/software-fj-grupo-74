@@ -43,7 +43,7 @@ class SistemaFJ:
     def reservas(self):
         return list(self._reservas)
 
-    def _buscar(self, lista, id_buscado, error_clase, nombre):
+    def _buscar(self, lista, id_buscado, nombre):
         """Busca un objeto por ID; si no existe lanza RegistroNoEncontradoError."""
         if id_buscado is None:
             raise ParametroFaltanteError(f"Falta el ID de {nombre}.")
