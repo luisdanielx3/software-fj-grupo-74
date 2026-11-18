@@ -36,3 +36,8 @@ class EntidadBase(ABC):
 
     def __str__(self):
         return self.describir()      # print(objeto) muestra su descripcion
+
+    def __repr__(self):
+        # Representacion tecnica: la que se ve al depurar o al imprimir una lista de objetos.
+        # Ejemplo: Cliente('CLI-001')
+        return f"{self.__class__.__name__}('{self.id}')"
