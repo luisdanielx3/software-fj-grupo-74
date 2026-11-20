@@ -45,18 +45,22 @@ class Servicio(EntidadBase, ABC):
     # ---------- Propiedades ----------
     @property
     def nombre(self):
+        # Solo lectura: el nombre no se puede cambiar una vez creado el servicio.
         return self._nombre
 
     @property
     def tarifa_hora(self):
+        # Solo lectura: devuelve el valor de una hora de servicio.
         return self._tarifa_hora
 
     @property
     def disponible(self):
+        # Indica si el servicio se puede reservar en este momento.
         return self._disponible
 
     @disponible.setter
     def disponible(self, valor):
+        # Permite activar o desactivar el servicio; bool() lo convierte a True/False.
         self._disponible = bool(valor)
 
     # ---------- Metodos abstractos: cada servicio hijo DEBE sobrescribirlos ----------
@@ -103,6 +107,7 @@ class ReservaSala(Servicio):
 
     @property
     def capacidad(self):
+        # Solo lectura: cantidad maxima de personas que caben en la sala.
         return self._capacidad
 
     def validar_parametros(self, horas):
@@ -133,6 +138,7 @@ class AlquilerEquipo(Servicio):
 
     @property
     def cantidad(self):
+        # Solo lectura: cuantas unidades del equipo se alquilan.
         return self._cantidad
 
     def validar_parametros(self, horas):
@@ -162,6 +168,7 @@ class AsesoriaEspecializada(Servicio):
 
     @property
     def nivel(self):
+        # Solo lectura: "junior" o "senior".
         return self._nivel
 
     def validar_parametros(self, horas):
