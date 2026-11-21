@@ -15,6 +15,10 @@ class ParametroFaltanteError(ErrorSoftwareFJ):
     """Se llamo a una operacion sin entregar un dato obligatorio."""
 
 
+class RegistroNoEncontradoError(ErrorSoftwareFJ):
+    """Se busco un cliente o servicio por su ID y no existe en las listas del sistema."""
+
+
 class ClienteInvalidoError(ErrorSoftwareFJ):
     """Los datos personales de un cliente no cumplen las validaciones."""
 
