@@ -153,6 +153,18 @@ class Reserva(EntidadBase):
         finally:
             log.debug("PROCESAR intento finalizado | %s", self.id)
 
+    def resumen(self):
+        """Devuelve un texto de varias lineas con todos los datos de la reserva."""
+        costo = f"${self._costo_final:,.2f}" if self._costo_final is not None else "pendiente de calcular"
+        return (
+            f"Reserva {self.id}\n"
+            f"  Cliente  : {self._cliente.nombre} ({self._cliente.id})\n"
+            f"  Servicio : {self._servicio.nombre} ({self._servicio.id})\n"
+            f"  Duracion : {self._horas} horas\n"
+            f"  Estado   : {self._estado.value}\n"
+            f"  Costo    : {costo}"
+        )
+
     def describir(self):
         costo = f" | costo final ${self._costo_final:,.2f}" if self._costo_final is not None else ""
         return (f"[{self.id}] {self._cliente.nombre} -> {self._servicio.nombre} | "

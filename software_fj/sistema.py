@@ -11,6 +11,7 @@ from .excepciones import (
     ClienteInvalidoError,
     ErrorSoftwareFJ,
     ParametroFaltanteError,
+    RegistroNoEncontradoError,
     ServicioInvalidoError,
 )
 from .registro import obtener_logger
@@ -42,14 +43,14 @@ class SistemaFJ:
     def reservas(self):
         return list(self._reservas)
 
-    def _buscar(self, lista, id_buscado, error_clase, nombre):
-        """Busca un objeto por ID; si no existe lanza el error indicado."""
+    def _buscar(self, lista, id_buscado, nombre):
+        """Busca un objeto por ID; si no existe lanza RegistroNoEncontradoError."""
         if id_buscado is None:
             raise ParametroFaltanteError(f"Falta el ID de {nombre}.")
         for elemento in lista:
             if elemento.id == id_buscado:
                 return elemento
-        raise error_clase(f"No existe {nombre} con ID '{id_buscado}'.")
+        raise RegistroNoEncontradoError(f"No existe {nombre} con ID '{id_buscado}'.")
 
     # ---------- Operaciones seguras ----------
     def registrar_cliente(self, nombre, documento, correo, telefono):
@@ -89,8 +90,8 @@ class SistemaFJ:
     def crear_reserva(self, id_cliente, id_servicio, horas):
         """Crea una reserva pendiente. Devuelve la Reserva o None si hubo error."""
         try:
-            cliente = self._buscar(self._clientes, id_cliente, ClienteInvalidoError, "el cliente")
-            servicio = self._buscar(self._servicios, id_servicio, ServicioInvalidoError, "el servicio")
+            cliente = self._buscar(self._clientes, id_cliente, "el cliente")
+            servicio = self._buscar(self._servicios, id_servicio, "el servicio")
             reserva = Reserva(cliente, servicio, horas)
         except ErrorSoftwareFJ as error:
             log.error("CREAR RESERVA fallido | %s", error)
