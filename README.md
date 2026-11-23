@@ -16,7 +16,7 @@ Los errores y eventos se registran en `logs/software_fj.log`.
 
 | Archivo | Contenido |
 |---|---|
-| `main.py` | Simulacion de 18 operaciones (validas e invalidas) |
+| `main.py` | Simulacion de 21 operaciones (validas e invalidas) |
 | `software_fj/entidad.py` | Clase abstracta `EntidadBase` (ID unico + `describir()`) |
 | `software_fj/cliente.py` | `Cliente` con datos privados y validaciones estrictas |
 | `software_fj/servicios.py` | Clase abstracta `Servicio` + `ReservaSala`, `AlquilerEquipo`, `AsesoriaEspecializada` |
@@ -41,5 +41,3 @@ Grupo 213023_74
 - Rosa Isela Betancurt Cabrales
 - Luis Daniel Vergara Orozco
 - Iván Daniel Jiménez Carrillo
-- Integrante_4
-- Integrante_5
