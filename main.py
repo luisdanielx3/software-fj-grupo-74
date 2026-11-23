@@ -1,5 +1,5 @@
 """
-Software FJ - Simulacion de 15 operaciones (validas e invalidas).
+Software FJ - Simulacion de 21 operaciones (validas e invalidas).
 
 Programacion (213023) - UNAD - Fase 4
 Ejecutar con:  python main.py
@@ -103,6 +103,20 @@ def main():
     sistema.ejecutar(r6.confirmar)
     ok, res = sistema.ejecutar(r6.procesar, 0.19, 0.90)
     mostrar(18, "Procesar con descuento inconsistente del 90 %", ok, "" if ok else res)
+
+    # ---------------- VALIDACIONES DE CADA SERVICIO ESPECIALIZADO ----------------
+    # Cada servicio valida sus propios parametros al crearse (polimorfismo).
+    sala_mala = sistema.registrar_servicio(ReservaSala, "Sala Sin Cupo", 40000, 0)
+    mostrar(19, "Crear ReservaSala con capacidad 0 (invalida)", sala_mala is not None,
+            "Rechazado (ver logs)" if sala_mala is None else "")
+
+    equipo_malo = sistema.registrar_servicio(AlquilerEquipo, "Proyector", 15000, 0, deposito=-50000)
+    mostrar(20, "Crear AlquilerEquipo con cantidad 0 y deposito negativo", equipo_malo is not None,
+            "Rechazado (ver logs)" if equipo_malo is None else "")
+
+    asesoria_mala = sistema.registrar_servicio(AsesoriaEspecializada, "Redes", 90000, nivel="experto")
+    mostrar(21, "Crear AsesoriaEspecializada con nivel inexistente ('experto')", asesoria_mala is not None,
+            "Rechazado (ver logs)" if asesoria_mala is None else "")
 
     # ---------------- RESUMEN ----------------
     print("-" * 70)
